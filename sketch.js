@@ -5,7 +5,7 @@ var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEv
 var recognition = new SpeechRecognition();
 var speechRecognitionList = new SpeechGrammarList();
 
-let text = "";
+let text = "soleil";
 
 //recognition.grammars = speechRecognitionList;
 recognition.continuous = true;
@@ -91,10 +91,10 @@ function setup() {
 
 function draw() {
   textSrc.background(0);
-  textSrc.textSize(100);
+  textSrc.textSize(700);
   textSrc.textFont(font);
   textSrc.fill(255);
-  textSrc.text(text, 0, height * 0.5);
+  textSrc.text(text, -0.0 * width, height);
 
   // shader() sets the active shader with our shader
   shaderLayer.shader(camShader);
@@ -102,13 +102,15 @@ function draw() {
   camShader.setUniform("tex0", textSrc);
 
   // send a slow frameCount to the shader as a time variable
-  camShader.setUniform("time", frameCount * 0.01);
+  camShader.setUniform("time", frameCount * 0.1);
 
   // lets map the mouseX to frequency and mouseY to amplitude
   // try playing with these to get a more or less distorted effect
   // 10 and 0.25 are just magic numbers that I thought looked good
-  let freq = map(mouseX, 0, width, 0, 10.0);
-  let amp = map(mouseY, 0, height, 0, 0.25);
+  // let freq = map(mouseX, 0, width, 0, 10.0);
+  // let amp = map(mouseY, 0, height, 0, 0.25);
+  let freq = 15;
+  let amp = 0.25;
 
   // send the two values to the shader
   camShader.setUniform("frequency", freq);
