@@ -67,15 +67,18 @@ let index2 = numLayers / 3; // 30
 let index3 = (numLayers / 3) * 2; // 60
 
 function preload() {
+  asteroid = loadModel("assets/obj/asteroid.obj");
   // load the shaders, we will use the same vertex shader and frag shaders for both passes
   camShader = loadShader("assets/shader/vertex.vert", "assets/shader/blur.frag");
-  pupImg = loadImage("assets/img/bbq.jpg");
+  asteroidTexture = loadImage("assets/img/asteroidTexture.jpg");
   font = loadFont("assets/font/MonumentExtended-Regular.otf");
 }
 
 function setup() {
   // shaders require WEBGL mode to work
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight, WEBGL);
+
+  objLayer = createGraphics(width, height, WEBGL);
 
   shaderLayer = createGraphics(width, height, WEBGL);
   shaderLayer.noStroke();
@@ -90,16 +93,18 @@ function setup() {
 }
 
 function draw() {
+  background(255);
   textSrc.background(0);
-  textSrc.textSize(700);
+  textSrc.textSize(2500);
   textSrc.textFont(font);
   textSrc.fill(255);
-  textSrc.text(text, -0.0 * width, height);
+  textSrc.text(text, -0.5 * width, 2 * height);
 
   // shader() sets the active shader with our shader
   shaderLayer.shader(camShader);
   // lets just send the cam to our shader as a uniform
   camShader.setUniform("tex0", textSrc);
+  // camShader.setUniform("tex0", textSrc);
 
   // send a slow frameCount to the shader as a time variable
   camShader.setUniform("time", frameCount * 0.1);
@@ -118,7 +123,17 @@ function draw() {
 
   // rect gives us some geometry on the screen
   shaderLayer.rect(0, 0, width, height);
-  image(shaderLayer, 0, 0, width, height);
+  // image(shaderLayer, 0, 0, width, height);
+  texture(shaderLayer, 0, 0, width, height);
+  plane(width, height);
+  rotateX(frameCount * 0.01);
+  rotateY(frameCount * 0.01);
+  rotateZ(frameCount * 0.01);
+  scale(3);
+  // normalMaterial();
+  // texture(asteroidTexture, 0, 0, width, height);
+  texture(asteroidTexture, 0, 0, width, height);
+  model(asteroid);
 }
 
 function windowResized() {
