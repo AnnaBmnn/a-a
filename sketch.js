@@ -22,15 +22,16 @@ let cameraX = 0;
 let cameraY = 0;
 const startButton = document.querySelector(".js-start");
 
-startButton.addEventListener("click", function() {
+startButton.addEventListener("click", function () {
   isDrawing = true;
   startSong();
+  this.style.display = "none";
 });
 
 function startSong() {
   // song.jump(73);
   song.play();
-  bg = loadImage("assets/img/asteroidTexture.jpg");
+  // bg = loadImage("assets/img/asteroidTexture.jpg");
 
   fft = new p5.FFT();
   peakDetect = new p5.PeakDetect();
@@ -41,16 +42,24 @@ function startSong() {
   }, 0.5);
 }
 
-function preload() {
-  song = loadSound("assets/son/lune-1.m4a");
-  font = loadFont("assets/font/MonumentExtended-Regular.otf");
-  // load the shaders, we will use the same vertex shader and frag shaders for both passes
-  camShader = loadShader("assets/shader/vertex.vert", "assets/shader/blur.frag");
-  luneBG = loadImage("assets/img/moon.png");
-  bg = loadImage("assets/img/asteroidTexture.jpg");
+async function preload() {
+  try {
+    song = await loadSound("assets/son/lune-1.m4a");
+    font = await loadFont("assets/font/MonumentExtended-Regular.otf");
+    // load the shaders, we will use the same vertex shader and frag shaders for both passes
+    camShader = await loadShader("assets/shader/vertex.vert", "assets/shader/blur.frag");
+    luneBG = await loadImage("assets/img/moon.png");
+    bg = await loadImage("assets/img/asteroidTexture.jpg");
+  } catch (e) {
+    // Returns error page
+    console.log(e);
+  } finally {
+    console.log("LOADED");
+  }
 }
 
 function setup() {
+  startButton.style.display = "block";
   // shaders require WEBGL mode to work
   createCanvas(windowWidth, windowHeight, WEBGL);
   bgGraphics = createGraphics(windowWidth, windowHeight, WEBGL);
